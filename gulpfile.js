@@ -1,15 +1,17 @@
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
     watch = require('gulp-watch'),
+    plumber = require('gulp-plumber'),
     sourcemaps = require('gulp-sourcemaps'),
     rename = require('gulp-rename');
 
 gulp.task('sass', function() {
     return gulp.src('resources/assets/sass/**/*.scss')
         .pipe(sourcemaps.init())
+        .pipe(plumber())
         .pipe(sass({
             includePaths: ['./node_modules/foundation-sites/scss']
-        }))
+        }).on('error', sass.logError))
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('public/assets/css/'));
 });
