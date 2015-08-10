@@ -1,0 +1,8 @@
+.top-bar {
+  @include plr(1em);
+  @include clearfix;
+  height: 60px;
+  background: $white;
+
+
+}

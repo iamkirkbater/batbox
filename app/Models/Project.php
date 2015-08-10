@@ -1,6 +1,6 @@
 <?php
 
-namespace Batbox;
+namespace Batbox\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

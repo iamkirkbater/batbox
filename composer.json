@@ -7,8 +7,10 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-        "rcrowe/TwigBridge": "^0.7.2",
-        "Zizaco/entrust": "^1.4"
+        "rcrowe/TwigBridge": "0.8.x",
+        "Zizaco/entrust": "^1.4",
+        "doctrine/dbal": "^2.5",
+        "cartalyst/sentinel": "2.0.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

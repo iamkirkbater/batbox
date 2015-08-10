@@ -146,6 +146,10 @@ return [
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
+        'Cartalyst\Sentinel\Laravel\SentinelServiceProvider',
+
+        'TwigBridge\ServiceProvider',
+
     ],
 
     /*
@@ -193,6 +197,12 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
+
+        'Activation' => 'Cartalyst\Sentinel\Laravel\Facades\Activation',
+        'Reminder'   => 'Cartalyst\Sentinel\Laravel\Facades\Reminder',
+        'Sentinel'   => 'Cartalyst\Sentinel\Laravel\Facades\Sentinel',
+
+        'Twig' => 'TwigBridge\Facade\Twig',
 
     ],
 

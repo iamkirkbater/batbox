@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use Batbox\Http\Requests;
 use Batbox\Http\Controllers\Controller;
-use Batbox\Project;
+use Batbox\Models\Project;
 
 class ProjectController extends Controller
 {
