@@ -1,0 +1,10 @@
+input, textarea, button {
+  &.no-border {
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  &.light-border-on-focus:focus {
+    border: 1px solid $white-smoke;
+  }
+}

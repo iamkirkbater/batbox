@@ -4,5 +4,30 @@
   height: 60px;
   background: $white;
 
+  .no-margin-left {
+    margin-left: 0;
+  }
 
+  section.left {
+    width: 75%;
+
+    @include mq($small-only) {
+      width: 100%;
+    }
+  }
+
+  .search-container {
+    width: calc(100% - 3.9rem);
+  }
+
+  #project-search-button {
+    position: absolute;
+    left: .5rem;
+  }
+
+  #project-search { // Search Box
+    margin-top: 12px;
+    padding-left: 2em;
+    width: 100%;
+  }
 }
