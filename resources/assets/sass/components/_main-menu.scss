@@ -1,0 +1,100 @@
+$main-menu-width: 270px;
+
+.menu-wrapper {
+  width: 100%;
+  @include transition(all 250ms ease);
+  -webkit-transition-property: width, transform, margin-left;
+  -moz-transition-property: width, transform, margin-left;
+  -o-transition-property: width, transform, margin-left;
+  transition-property: width, transform, margin-left;
+}
+
+
+.main-menu {
+  @include transition(transform 250ms ease);
+  width: $main-menu-width;
+  height: 100%;
+  background: $jet;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  @include mq($small-only) {
+    @include prefix((transform: translate3d(-#{$main-menu-width}, 0, 0)));
+  }
+
+  @include mq($medium-up) {
+    float: left;
+  }
+
+  .branding {
+    height: 60px;
+    background: #22262e;
+    @include plr(0, 1rem);
+
+    .brand {
+      color: $white;
+      line-height: 60px;
+      font-size: 2rem;
+      display: block;
+      @include plr(1rem);
+    }
+  }
+
+  .logged-in-as {
+    @include plr(1em);
+    @include ptb(1em);
+    color: $aluminum;
+
+    .name {
+      color: $white;
+      display: block;
+      font-size: 1.5rem;
+    }
+
+  }
+
+  .menu {
+    @include plr(1em);
+
+    ul {
+      list-style: none;
+      font-size: 1.25rem;
+      margin-left: 0;
+    }
+  }
+
+  a {
+    color: #8b91a0;
+  }
+}
+
+@include mq($small-only) {
+  .menu-wrapper {
+    @include prefix((transform: translate3d(0, 0, 0)));
+  }
+
+  body.menu-out .menu-wrapper {
+    @include prefix((transform: translate3d(#{$main-menu-width},0,0)));
+  }
+  body.menu-out .main-menu {
+    @include prefix((transform: translate3d(0,0,0)));
+  }
+}
+
+@include mq($medium-up) {
+  .menu-wrapper {
+    width: calc(100% - #{$main-menu-width});
+    margin-left: #{$main-menu-width};
+    float: left;
+  }
+
+  body.menu-out .menu-wrapper {
+    width: 100%;
+    margin-left: 0;
+  }
+  body.menu-out .main-menu {
+    @include prefix((transform: translate3d(-#{$main-menu-width}, 0, 0)));
+  }
+}

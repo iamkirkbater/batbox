@@ -1,0 +1,119 @@
+/// Mixin to prefix several properties at once
+/// @author Hugo Giraudel
+/// @param {Map} $declarations - Declarations to prefix
+/// @param {List} $prefixes (()) - List of prefixes to print
+@mixin prefix($declarations, $prefixes: (webkit, moz, ms, o)) {
+  @each $property, $value in $declarations {
+    @each $prefix in $prefixes {
+      #{'-' + $prefix + '-' + $property}: $value;
+    }
+
+    // Output standard non-prefixed declaration
+    #{$property}: $value;
+  }
+}
+
+@mixin font-smoothing($value: on) {
+  @if $value == on {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  @else {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+  }
+}
+
+@mixin transition($args...) {
+  @include prefix((transition: $args));
+}
+
+@mixin mq($size) {
+  @media #{$size} { @content }
+}
+
+@mixin border-radius($radius) {
+  @include border-bottom-radius($radius);
+  @include border-top-radius($radius);
+  @include border-left-radius($radius);
+  @include border-right-radius($radius);
+}
+
+@mixin collapse-right() {
+  padding-right: 0;
+}
+
+@mixin collapse-left() {
+  padding-left: 0;
+}
+
+@mixin collapse() {
+  @include collapse-left();
+  @include collapse-right();
+}
+
+@mixin zero() {
+  padding: 0;
+  margin: 0;
+}
+
+@mixin button($rest-color, $hover-color: $rest-color) {
+  background-color: $rest-color;
+  border-radius: 0;
+  color: #fff;
+  display: inline-block;
+  font-size: 1em;
+  line-height: 1;
+  padding: .75em 1em;
+  text-decoration: none;
+  @include font-smoothing(on);
+  @include transition(background-color 200ms ease);
+  &:hover {
+    background-color: $hover-color;
+  }
+}
+
+@mixin ptb($top, $bottom: false) {
+  padding-top: $top;
+  @if $bottom == false {
+    padding-bottom: $top;
+  }
+  @else {
+    padding-bottom: $bottom;
+  }
+}
+@mixin plr($left, $right: false) {
+  padding-left: $left;
+  @if $right == false {
+    padding-right: $left;
+  }
+  @else {
+    padding-right: $right;
+  }
+}
+@mixin mtb($top, $bottom: false) {
+  margin-top: $top;
+  @if $bottom == false {
+    margin-bottom: $top;
+  }
+  @else {
+    margin-bottom: $bottom;
+  }
+}
+@mixin mlr($left, $right: false) {
+  margin-left: $left;
+  @if $right == false {
+    margin-right: $left;
+  }
+  @else {
+    margin-right: $right;
+  }
+}
+
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}

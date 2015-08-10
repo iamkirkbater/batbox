@@ -1,16 +1,44 @@
-var elixir = require('laravel-elixir');
+var gulp = require('gulp'),
+    sass = require('gulp-sass'),
+    watch = require('gulp-watch'),
+    sourcemaps = require('gulp-sourcemaps'),
+    rename = require('gulp-rename');
 
-/*
- |--------------------------------------------------------------------------
- | Elixir Asset Management
- |--------------------------------------------------------------------------
- |
- | Elixir provides a clean, fluent API for defining some basic Gulp tasks
- | for your Laravel application. By default, we are compiling the Sass
- | file for our application, as well as publishing vendor resources.
- |
- */
-
-elixir(function(mix) {
-    mix.sass('app.scss');
+gulp.task('sass', function() {
+    return gulp.src('resources/assets/sass/**/*.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass({
+            includePaths: ['./node_modules/foundation-sites/scss']
+        }))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('public/assets/css/'));
 });
+
+gulp.task('watch', function() {
+    gulp.watch('resources/assets/sass/**/*.scss', ['sass']);
+});
+
+//watch('resources/assets/sass/**/*.scss', function() {
+//    gulp.start('sass');
+//});
+//
+//gulp.task('watch', function() {
+//    return gulp.src('resources/assets/sass/**/*.scss')
+//        .pipe(watch('resources/assets/sass/**/*.scss'));
+//});
+
+gulp.task('init-foundation-copy', function() {
+    return gulp.src('./node_modules/foundation-sites/scss/foundation/_settings.scss',
+            { "base": "./node_modules/foundation-sites/scss"} )
+        .pipe(gulp.dest('resources/assets/sass'));
+});
+
+gulp.task('init-foundation-move', function() {
+    return gulp.src('./node_modules/foundation-sites/scss/foundation.scss')
+        .pipe(rename('./resources/assets/sass/foundation/_components.scss'))
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('init-foundation', ['init-foundation-copy', 'init-foundation-move']);
+
+gulp.task('default', ['sass', 'watch']);

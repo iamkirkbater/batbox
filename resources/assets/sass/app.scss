@@ -1,2 +1,9 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+// BatBOX Application
 
+@import "foundation/settings";
+@import "foundation/components";
+@import "mixins";
+@import "components/icons";
+@import "components/main-menu";
+@import "components/top-bar";
+@import "main";

@@ -3,7 +3,7 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Batbox\Project;
+use Batbox\Models\Project;
 
 class ProjectControllerTest extends TestCase
 {
@@ -45,8 +45,8 @@ class ProjectControllerTest extends TestCase
         $this->seeInDatabase('projects', ['name'=>$project->name]);
 
         $this->patch('/project/'.$project->id, [
-            'name' => "Changed Project Name",
-            ])
+             'name' => "Changed Project Name",
+             ])
              ->seeJson([
                  'updated' => true,
                  'name' => "Changed Project Name",

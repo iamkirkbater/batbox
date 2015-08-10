@@ -15,7 +15,7 @@ Route::get('/', function () {
     $arr = array();
     $arr['name'] = "";
 
-    return view('dashboard', $arr);
+    return Twig::render('pages/dashboard', $arr);
 });
 
 Route::resource('project', 'ProjectController');
