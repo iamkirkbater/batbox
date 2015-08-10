@@ -4,6 +4,10 @@
   height: 60px;
   background: $white;
 
+  .inline-list {
+    margin-bottom: 0;
+  }
+
   .no-margin-left {
     margin-left: 0;
   }
@@ -33,6 +37,7 @@
     margin-top: 12px;
     padding-left: 2em;
     width: 100%;
+    margin-bottom: 0;
   }
 
 
