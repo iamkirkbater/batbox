@@ -7,6 +7,10 @@ html, body {
   min-height: 100%;
 }
 
+main {
+  @include grid-column(12);
+}
+
 .position-container {
   position: relative;
 }

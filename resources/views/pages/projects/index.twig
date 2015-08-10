@@ -1,0 +1,19 @@
+{% extends "page" %}
+
+{% block titleTag %}Projects{% endblock %}
+
+{% block head %}
+    <h2>Projects</h2>
+{% endblock %}
+
+{% block page %}
+    {% for project in projects %}
+        <li>
+            {{ project.name }}
+        </li>
+    {% else %}
+        <li class="empty-list">
+            No projects found.
+        </li>
+    {% endfor %}
+{% endblock %}

@@ -18,4 +18,5 @@ Route::get('/', function () {
     return Twig::render('pages/dashboard', $arr);
 });
 
-Route::resource('project', 'ProjectController');
+
+Route::resource('projects', 'ProjectController');
