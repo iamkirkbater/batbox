@@ -3,8 +3,13 @@
 @import "foundation/settings";
 @import "foundation/components";
 @import "mixins";
+
+
 @import "components/icons";
 @import "components/main-menu";
 @import "components/top-bar";
 @import "components/forms";
+
+@import "pages/error";
+
 @import "main";

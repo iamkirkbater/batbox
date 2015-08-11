@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Server Error {{ code }} | BatBOX</title>
+    <link href="assets/css/app.css" rel="stylesheet">
+</head>
+<body class="error-page">
+
+<div id="error-page">
+    <div class="error-container row">
+        <div class="small-12 columns">
+            <img src="assets/images/batbox-large.png" alt="BatBOX" title="BatBOX">
+        </div>
+    </div>
+    <div class="error-container row">
+        <div class="small-12 columns">
+            <p>There seems to have been some kind of error serving this page.</p>
+        </div>
+    </div>
+</div>
+
+<h1 class="status-code">{{ code }}</h1>
+
+</body>
+</html>

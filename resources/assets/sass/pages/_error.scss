@@ -1,0 +1,27 @@
+body.error-page {
+  background: $white-smoke;
+}
+
+#error-page {
+  height: 100%;
+  align-items: center;
+}
+
+.error-container {
+  text-align: center;
+
+  img {
+    max-width: 75%;
+    @include ptb(2em);
+  }
+}
+
+h1.status-code {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 30vw;
+  opacity: .1;
+  transform: rotate(-35deg);
+  font-weight: bolder;
+}
