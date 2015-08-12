@@ -1,0 +1,70 @@
+.project-list {
+  @include grid-row();
+
+  &.odd {
+    background: $white-smoke;
+  }
+  &.even {
+    background: $ghost;
+  }
+
+  .name {
+    @include grid-column(11);
+    @include plr(0);
+    font-weight: bold;
+    @include mq($medium-up) {
+      @include grid-column(5);
+      @include plr(0);
+      line-height: 3;
+    }
+
+    a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      @include ptb(10px);
+      @include plr($column-gutter/2);
+    }
+  }
+
+  .last-updated {
+    @include grid-column(11);
+    @include ptb(10px);
+    @include mq($medium-up) {
+      @include grid-column(5);
+      line-height: 3;
+    }
+  }
+
+  .edit, .log-time {
+    @include grid-column(1);
+    @include plr(0);
+    font-size: 1.4em;
+
+    @include mq($medium-up) {
+      @include grid-column(1);
+      line-height: 3;
+    }
+  }
+
+  .edit {
+    @include mq($large-up) {
+      text-align: right;
+    }
+  }
+
+  .log-time {
+    float: right;
+  }
+}
+
+.list--head {
+  font-weight: bold;
+  background: #8b91a0;
+  border-bottom: 1px solid #22262e;
+
+  .name {
+    @include plr($column-gutter/2);
+    @include ptb(10px);
+  }
+}

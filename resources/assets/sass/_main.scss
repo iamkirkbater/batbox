@@ -5,6 +5,7 @@ html, body {
 .menu-wrapper {
   background: $silver;
   min-height: 100%;
+  @include clearfix;
 }
 
 main {

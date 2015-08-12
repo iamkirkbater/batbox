@@ -3,17 +3,40 @@
 {% block titleTag %}Projects{% endblock %}
 
 {% block head %}
-    <h2>Projects</h2>
+    <div class="columns">
+        <h2>Projects</h2>
+    </div>
 {% endblock %}
 
 {% block page %}
-    {% for project in projects %}
-        <li>
-            {{ project.name }}
-        </li>
-    {% else %}
-        <li class="empty-list">
-            No projects found.
-        </li>
-    {% endfor %}
+    <div class="row">
+        <div class="project-list list--head">
+            <div class="name">Name</div>
+            <div class="last-updated">Last Updated</div>
+        </div>
+        {% for project in projects %}
+                <div class="project-list
+                    {% if loop.index % 2 == 0 %} even{% else %} odd{% endif %}
+                    {% if loop.last %} last{% endif %}">
+                    <div class="name">
+                        <a href="/projects/{{ project.id }}">
+                            {{ project.name }}
+                        </a>
+                    </div>
+                    <div class="log-time">
+                        <a href="#" class="icon"><i class="fa fa-clock-o"></i></a>
+                    </div>
+                    <div class="last-updated">
+                        {{ project.last_updated }}
+                    </div>
+                    <div class="edit">
+                        <a href="/projects/{{ project.id }}/edit" class="icon"><i class="fa fa-edit"></i></a>
+                    </div>
+                </div>
+        {% else %}
+            <li class="empty-list">
+                No projects found.
+            </li>
+        {% endfor %}
+    </div>
 {% endblock %}
