@@ -10,6 +10,12 @@ class ProjectControllerTest extends TestCase
     use WithoutMiddleware;
     use DatabaseTransactions;
 
+    public function setUp()
+    {
+        parent::setUp();
+        $this->prepare();
+    }
+
     public function testForProjectsPage()
     {
         $this->visit('/projects')
@@ -45,11 +51,10 @@ class ProjectControllerTest extends TestCase
         $this->seeInDatabase('projects', ['name'=>$project->name]);
 
         $this->patch('/projects/'.$project->id, [
-             'name' => "Changed Project Name",
+                'name' => "Changed Project Name",
              ])
              ->seeJson([
-                 'updated' => true,
-                 'name' => "Changed Project Name",
+                 'updated' => true
              ]);
     }
 
@@ -78,6 +83,12 @@ class ProjectControllerTest extends TestCase
         $project->name = "Test Project";
         $project->status = 1;
         return $project;
+    }
+
+    private function prepare()
+    {
+        \Artisan::call('migrate');
+        \Mail::pretend(true);
     }
 
 }

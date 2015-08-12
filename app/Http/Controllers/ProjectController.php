@@ -85,8 +85,29 @@ class ProjectController extends Controller
 
         if ($project != null)
         {
+            $updated = false;
+            $updatedName = $request->get('name');
+            $updatedStatus = $request->get('status');
+
+            if (isset($updatedName))
+            {
+                $updated = true;
+                $project->name = $request->get('name');
+            }
+
+            if (isset($updatedStatus))
+            {
+                $updated = true;
+                $project->status = $request->get('status');
+            }
+
+            if ($updated)
+            {
+                $project->save();
+            }
+
             return [
-                $project->id => $this->pushProject($request, $project),
+                $project->id => $project,
                 "updated" => true,
             ];
         }
