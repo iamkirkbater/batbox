@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call(UserTableSeeder::class);
+        $this->call(Batbox\Database\ProjectSeeder::class);
+        $this->command->info('Project Table Seeded.');
 
         Model::reguard();
     }
