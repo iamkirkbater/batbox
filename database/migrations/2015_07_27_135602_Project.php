@@ -16,8 +16,6 @@ class Project extends Migration
             $table->increments('id');
             $table->string("name");
             $table->boolean("status");
-            $table->integer("contact", false, true)->nullable();
-            $table->index("contact");
             $table->timestamps();
         });
     }
