@@ -2,7 +2,7 @@
 
 namespace Batbox\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use \Eloquent as Model;
 
 class Project extends Model
 {
