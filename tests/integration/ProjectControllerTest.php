@@ -12,13 +12,13 @@ class ProjectControllerTest extends TestCase
 
     public function testForProjectsPage()
     {
-        $this->visit('/project')
+        $this->visit('/projects')
             ->see('Projects');
     }
 
     public function testForSingleID()
     {
-        $this->visit('/project/10')
+        $this->visit('/projects/10')
              ->see('10');
     }
 
@@ -26,7 +26,7 @@ class ProjectControllerTest extends TestCase
     {
         $projectName = 'Test Project';
 
-        $this->post('/project', [
+        $this->post('/projects', [
                 'name'=> $projectName,
                 'status' => 1,
             ])
@@ -44,7 +44,7 @@ class ProjectControllerTest extends TestCase
 
         $this->seeInDatabase('projects', ['name'=>$project->name]);
 
-        $this->patch('/project/'.$project->id, [
+        $this->patch('/projects/'.$project->id, [
              'name' => "Changed Project Name",
              ])
              ->seeJson([
@@ -60,7 +60,7 @@ class ProjectControllerTest extends TestCase
 
         $this->seeInDatabase('projects', ['name' => $project->name]);
 
-        $this->delete('/project/'.$project->id)
+        $this->delete('/projects/'.$project->id)
              ->seeJson([
                  'deleted' => true,
              ]);
