@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Batbox\Models\Project;
 
@@ -45,17 +44,53 @@ class ProjectControllerTest extends TestCase
 
     public function testForUpdate()
     {
+        $updated_project_name = "Changed Project Name";
+
         $project = $this->createTestProject();
         $project->save();
 
         $this->seeInDatabase('projects', ['name'=>$project->name]);
+        $project->name = $updated_project_name;
 
         $this->patch('/projects/'.$project->id, [
-                'name' => "Changed Project Name",
+                'name' => $updated_project_name,
              ])
              ->seeJson([
-                 'updated' => true
+                 'updated' => true,
+                 'name' => $updated_project_name,
              ]);
+
+        $project = $this->createTestProject();
+        $project->save();
+
+        $this->seeInDatabase('projects', ['name'=>$project->name, 'status'=>1]);
+        $project->status = false;
+
+        $this->patch('/projects/'.$project->id, [
+            'status' => 0,
+            ])
+            ->seeJson([
+                'updated' => true,
+                'status' => 0,
+            ]);
+
+        $updated_project_name = "New Project";
+        $project = $this->createTestProject();
+        $project->save();
+
+        $this->seeInDatabase('projects', ['name'=>$project->name, 'status'=>1]);
+        $project->status = false;
+        $project->name = $updated_project_name;
+
+        $this->patch('/projects/'.$project->id, [
+                'status' => 0,
+                'name' => $updated_project_name,
+            ])
+            ->seeJson([
+                'updated' => true,
+                'status' => 0,
+                'name' => $updated_project_name,
+            ]);
     }
 
     public function testForDelete()
