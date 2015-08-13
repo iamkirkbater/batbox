@@ -2,6 +2,14 @@ html, body {
   background: $jet;
 }
 
+a {
+  color: $primary-color;
+
+  &:hover {
+    color: $secondary-color;
+  }
+}
+
 .menu-wrapper {
   background: $silver;
   min-height: 100%;
@@ -9,9 +17,17 @@ html, body {
 }
 
 main {
-  @include grid-column(12);
+  @include pad(1em default);
 }
 
 .position-container {
   position: relative;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
 }

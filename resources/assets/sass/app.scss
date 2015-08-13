@@ -1,10 +1,14 @@
 // BatBOX Application
 
-@import "foundation/settings";
-@import "foundation/components";
+@import "normalize";
+@import "bourbon";
+@import "neat";
+@import "base/base";
+
 @import "mixins";
 
-
+@import "components/media-queries";
+@import "components/colors";
 @import "components/icons";
 @import "components/main-menu";
 @import "components/top-bar";

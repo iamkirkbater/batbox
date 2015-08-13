@@ -24,15 +24,25 @@
   }
 }
 
-@mixin transition($args...) {
-  @include prefix((transition: $args));
+@function lower-bound($range) {
+  @if length($range) <= 0 {
+    @return 0;
+  }
+  @return nth($range, 1);
+}
+
+@function upper-bound($range) {
+  @if length($range) < 2 {
+    @return 999999999999;
+  }
+  @return nth($range, 2);
 }
 
 @mixin mq($size) {
   @media #{$size} { @content }
 }
 
-@mixin border-radius($radius) {
+@mixin radius($radius) {
   @include border-bottom-radius($radius);
   @include border-top-radius($radius);
   @include border-left-radius($radius);
@@ -107,13 +117,5 @@
   }
   @else {
     margin-right: $right;
-  }
-}
-
-@mixin clearfix {
-  &:after {
-    content: "";
-    display: table;
-    clear: both;
   }
 }

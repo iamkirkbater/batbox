@@ -9,7 +9,6 @@ $main-menu-width: 270px;
   transition-property: width, transform, margin-left;
 }
 
-
 .main-menu {
   @include transition(transform 250ms ease);
   width: $main-menu-width;
