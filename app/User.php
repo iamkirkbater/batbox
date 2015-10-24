@@ -1,6 +1,6 @@
 <?php
 
-namespace Batbox\Models;
+namespace Batbox;
 
 use \Eloquent as Model;
 use Illuminate\Auth\Authenticatable;

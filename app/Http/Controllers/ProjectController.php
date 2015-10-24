@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 
 use Batbox\Http\Requests;
 use Batbox\Http\Controllers\Controller;
-use Batbox\Models\Project;
-use \Twig;
+use Batbox\Models\Project as Project;
 
 class ProjectController extends Controller
 {
@@ -19,7 +18,7 @@ class ProjectController extends Controller
     public function index()
     {
         $arr = [ "projects" => Project::all() ];
-        return Twig::render("pages/projects/index", $arr);
+        return $arr;
     }
 
     /**

@@ -15,7 +15,7 @@ Route::get('/', function () {
     $arr = array();
     $arr['name'] = "";
 
-    return Twig::render('pages/dashboard', $arr);
+    return view('dashboard', $arr);
 });
 
 
