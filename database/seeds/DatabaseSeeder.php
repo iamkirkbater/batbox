@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call(Batbox\Database\ProjectSeeder::class);
         $this->command->info('Project Table Seeded.');
 
+        $this->call(Batbox\Database\TaskSeeder::class);
+
         Model::reguard();
     }
 }

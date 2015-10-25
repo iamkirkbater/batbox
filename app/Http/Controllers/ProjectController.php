@@ -111,7 +111,7 @@ class ProjectController extends Controller
             ];
         }
 
-        return null;
+        return [];
     }
 
     /**

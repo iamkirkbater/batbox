@@ -52,7 +52,7 @@ class ProjectControllerTest extends TestCase
         $this->seeInDatabase('projects', ['name'=>$project->name]);
         $project->name = $updated_project_name;
 
-        $this->patch('/project/'.$project->id, [
+        $this->patch('/projects/'.$project->id, [
             'name' => "Changed Project Name",
             ])
              ->seeJson([

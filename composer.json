@@ -19,12 +19,12 @@
     },
     "autoload": {
         "classmap": [
-            "database",
-            "app/Models"
+            "database"
         ],
         "psr-4": {
             "Batbox\\": "app/",
-            "Batbox\\Tests": "tests/"
+            "Batbox\\Models\\": "app/Models",
+            "Batbox\\Tests\\": "tests/"
         }
     },
     "autoload-dev": {
