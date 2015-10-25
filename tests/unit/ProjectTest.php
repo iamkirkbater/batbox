@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kirkbater
- * Date: 8/12/15
- * Time: 11:40 AM
- */
 
 use Batbox\Models\Project;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
