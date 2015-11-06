@@ -3,11 +3,14 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Batbox\Models\Project;
+use Teapot\HttpResponse\Status\StatusCode as HTTP;
 
 class ProjectControllerTest extends TestCase
 {
     use WithoutMiddleware;
     use DatabaseTransactions;
+
+    private $factory;
 
     public function setUp()
     {
@@ -23,21 +26,22 @@ class ProjectControllerTest extends TestCase
 
     public function testForSingleID()
     {
-        $this->visit('/projects/10')
-             ->see('10');
+        $testProject = Project::find(1);
+        $this->visit('/projects/1')
+             ->seeJson(["name" => $testProject->name]);
     }
 
     public function testForCreate()
     {
         $projectName = 'Test Project';
 
-        $this->post('/projects', [
+        $response = $this->call('POST', '/projects', [
                 'name'=> $projectName,
                 'status' => 1,
-            ])
-             ->seeJson([
-                 'created' => true,
-             ]);
+            ]);
+
+        $this->seeJsonContains(["name" => $projectName]);
+        $this->assertEquals(HTTP::CREATED, $response->status());
 
         $this->seeInDatabase('projects', ['name' => $projectName]);
     }
@@ -120,10 +124,22 @@ class ProjectControllerTest extends TestCase
         return $project;
     }
 
+    private function seedTestDB() {
+        \Artisan::call('db:seed');
+    }
+
     private function prepare()
     {
         \Artisan::call('migrate');
         \Mail::pretend(true);
+        $this->seedTestDB();
+
+//        $this->factory->define(Project::class, function (Faker\Generator $faker) {
+//            return [
+//                "name" => $faker->company,
+//                "status" => $this->getPercentage(75),
+//            ];
+//        });
     }
 
 }

@@ -7,8 +7,8 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-        "rcrowe/TwigBridge": "^0.7.2",
-        "Zizaco/entrust": "^1.4"
+        "Zizaco/entrust": "^1.4",
+        "teapot/status": "1.0.x-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -53,5 +53,6 @@
     },
     "config": {
         "preferred-install": "dist"
-    }
+    },
+    "minimum-stability": "dev"
 }

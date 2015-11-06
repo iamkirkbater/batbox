@@ -5,8 +5,10 @@ namespace Batbox\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Batbox\Http\Requests;
+use Illuminate\Http\Response;
 use Batbox\Http\Controllers\Controller;
 use Batbox\Models\Project as Project;
+use Teapot\HttpResponse\Status\StatusCode as HTTP;
 
 class ProjectController extends Controller
 {
@@ -18,17 +20,7 @@ class ProjectController extends Controller
     public function index()
     {
         $arr = [ "projects" => Project::all() ];
-        return $arr;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
+        return new Response($arr, HTTP::OK);
     }
 
     /**
@@ -39,12 +31,12 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $project = new Project();
+        $project = $this->pushProject($request);
 
-        return [
-            $project->id => $this->pushProject($request, $project),
-            "created" => true,
-        ];
+        if ($project->id)
+        {
+           return new Response(["project" => $project, "link" => url("/projects/".$project->id)], HTTP::CREATED);
+        }
     }
 
     /**
@@ -128,11 +120,11 @@ class ProjectController extends Controller
         return [$id => ["deleted" => true]];
     }
 
-    private function pushProject($request, $project)
+    private function pushProject($request)
     {
+        $project = new Project();
         $project->name = $request->get('name');
         $project->status = $request->get('status');
-        // TODO: Add client/contact update
 
         $project->save();
         return $project;

@@ -23,4 +23,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         return $app;
     }
+
+    public function getPercentage($percent = 50)
+    {
+        $rand = mt_rand(1, 100);
+        if ($rand <= $percent)
+        {
+            return true;
+        }
+        return false;
+    }
 }
