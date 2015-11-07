@@ -33,4 +33,9 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         }
         return false;
     }
+
+    protected function seeError()
+    {
+        return $this->seeJsonContains(["error" => true]);
+    }
 }

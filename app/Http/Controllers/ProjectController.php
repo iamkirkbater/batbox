@@ -51,6 +51,7 @@ class ProjectController extends Controller
         {
            return new Response(["project" => $project, "link" => url("/projects/".$project->id)], HTTP::CREATED);
         }
+
         return new Response(null,HTTP::BAD_REQUEST);
     }
 

@@ -2,10 +2,10 @@
 
 namespace Batbox\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use \Eloquent as Model;
 
 class Task extends Model
 {
-    //
-    protected $table = "tasks";
+    protected $fillable = ['*'];
+
 }
