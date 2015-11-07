@@ -31,12 +31,27 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $project = $this->pushProject($request);
+        $nameNotProvided = !$request->get('name');
+        $statusNotProvided = !$request->get('status');
+
+        if ( $nameNotProvided || $statusNotProvided ) {
+            $param = "";
+            $param .= ($nameNotProvided) ? "Name" : "";
+            $param .= ($nameNotProvided && $statusNotProvided) ? ", " : "";
+            $param .= ($statusNotProvided) ? "Status" : "";
+            return new Response(["error" => true, "message" => "$param parameter(s) not provided."], HTTP::BAD_REQUEST);
+        }
+
+        $project = new Project();
+        $project->name = $request->get('name');
+        $project->status = $request->get('status');
+        $project->save();
 
         if ($project->id)
         {
            return new Response(["project" => $project, "link" => url("/projects/".$project->id)], HTTP::CREATED);
         }
+        return new Response(null,HTTP::BAD_REQUEST);
     }
 
     /**
@@ -96,6 +111,10 @@ class ProjectController extends Controller
             {
                 $project->save();
             }
+            else
+            {
+                return new Response("", HTTP::NOT_MODIFIED);
+            }
 
             return [
                 $project->id => $project,
@@ -103,7 +122,7 @@ class ProjectController extends Controller
             ];
         }
 
-        return [];
+        return new Response("", HTTP::NOT_MODIFIED);
     }
 
     /**
@@ -115,18 +134,12 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         $project = Project::find($id);
-        $project->delete();
 
-        return [$id => ["deleted" => true]];
-    }
-
-    private function pushProject($request)
-    {
-        $project = new Project();
-        $project->name = $request->get('name');
-        $project->status = $request->get('status');
-
-        $project->save();
-        return $project;
+        if ($project != null)
+        {
+            $project->delete();
+            return [$id => ["deleted" => true]];
+        }
+        return new Response("", HTTP::NOT_MODIFIED);
     }
 }
