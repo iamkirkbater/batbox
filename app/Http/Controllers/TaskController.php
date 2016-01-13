@@ -53,18 +53,20 @@ class TaskController extends Controller
         $name = filter_var($request->get("name"), FILTER_SANITIZE_STRING);
         $billable = filter_var($request->get("billable"), FILTER_VALIDATE_BOOLEAN, ['options' => ['default' => null]]);
 
+        $task = new Task();
+
         if ($name && $billable)
         {
-            $task = new Task();
             $task->name = $name;
             $task->billable = $billable;
             $task->save();
-
-            if ($task->id)
-            {
-                return new Response($task, HTTP::CREATED);
-            }
         }
+
+        if ($task->id)
+        {
+            return new Response($task, HTTP::CREATED);
+        }
+
         return new Response(["error" => true, "message" => "All paramaters were provdied, but one or more parameters was not valid."], HTTP::BAD_REQUEST);
     }
 
@@ -104,7 +106,45 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $task = Task::find($id);
+
+        if ($task == null)
+        {
+            return new Response("", HTTP::NOT_MODIFIED);
+        }
+
+        $updated = false;
+        $updatedName = $request->get('name');
+        $updatedBillableFlag = $request->get('billable');
+
+        if (isset($updatedName))
+        {
+            $updated = true;
+            $name = filter_var($request->get("name"), FILTER_SANITIZE_STRING);
+            $task->name = $name;
+        }
+
+        if (isset($updatedBillableFlag))
+        {
+            if ( ! is_bool($request->get('billable')))
+            {
+                return new Response(["error"=>true, "message"=>"Invalid Billable Argument"], HTTP::BAD_REQUEST);
+            }
+            $updated = true;
+            $task->billable = $request->get('billable');
+        }
+
+        if ($updated)
+        {
+            $task->save();
+            return [
+                $task->id => $task,
+                "updated" => true,
+            ];
+        }
+
+        return new Response("", HTTP::NOT_MODIFIED);
+
     }
 
     /**
@@ -115,6 +155,12 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $task = Task::destroy($id);
+
+        if ($task === 1) {
+            return new Response(["deleted" => true, "id" => $id]);
+        }
+
+        return new Response("", HTTP::NOT_MODIFIED);
     }
 }

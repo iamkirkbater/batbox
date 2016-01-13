@@ -80,7 +80,65 @@ class TaskControllerTest extends TestCase
         $response = $this->call('post', '/tasks', $task);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->seeError();
+    }
 
+    public function test_patch_an_existing_task()
+    {
+        // Create a test task so we can change it, then verify that it's there.
+        $testTask = $this->generateTestTask();
+        $testTask->save();
+        $this->seeInDatabase('tasks', ['name'=>$testTask->name]);
+
+        $task = [
+            "name" => "Updated Task",
+        ];
+        $response = $this->call('patch', '/tasks/'.$testTask->id, $task);
+        $this->assertEquals(HTTP::OK, $response->status());
+        $this->seeJsonContains(array("name" => "Updated Task"));
+
+        $testTask->save();
+
+        $task = [
+            "billable" => false,
+        ];
+        $response = $this->call('patch', '/tasks/' . $testTask->id, $task);
+        $this->assertEquals(HTTP::OK, $response->status());
+        $this->seeJsonContains(["billable" => false]);
+    }
+
+    public function test_fail_patch_tasks()
+    {
+        $response = $this->call('patch', '/tasks/-1', []);
+        $this->assertEquals(HTTP::NOT_MODIFIED, $response->status());
+
+        $testTask = $this->generateTestTask();
+        $testTask->save();
+        $this->seeInDatabase('tasks', ['name'=>$testTask->name]);
+
+        $response = $this->call('patch', '/tasks/'.$testTask->id, []);
+        $this->assertEquals(HTTP::NOT_MODIFIED, $response->status());
+
+        $response = $this->call('patch', '/tasks/'.$testTask->id, [
+            "billable" => "asldkfj",
+        ]);
+        $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
+    }
+
+    public function test_delete_a_task_successfully()
+    {
+        $task = $this->generateTestTask();
+        $task->save();
+        $this->seeInDatabase("tasks", ["name"=>$task->name]);
+
+        $response = $this->call('delete', '/tasks/'.$task->id, []);
+        $this->assertEquals(HTTP::OK, $response->status());
+        $this->notSeeInDatabase("tasks", ["name"=>$task->name]);
+    }
+
+    public function test_fail_to_delete_a_task()
+    {
+        $response = $this->call('delete', '/tasks/-1', []);
+        $this->assertEquals(HTTP::NOT_MODIFIED, $response->status());
     }
 
     private function setupDB()
@@ -93,5 +151,16 @@ class TaskControllerTest extends TestCase
     {
         $this->setupDB();
         \Mail::pretend(true);
+    }
+
+    /**
+     * @return Task
+     */
+    private function generateTestTask()
+    {
+        $testTask = new Task();
+        $testTask->name = "Test Task";
+        $testTask->billable = true;
+        return $testTask;
     }
 }
