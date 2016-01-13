@@ -90,33 +90,30 @@ class ProjectController extends Controller
     {
         $project = Project::find($id);
 
-        if ($project != null)
+        if ($project == null)
         {
-            $updated = false;
-            $updatedName = $request->get('name');
-            $updatedStatus = $request->get('status');
+            return new Response("", HTTP::NOT_MODIFIED);
+        }
 
-            if (isset($updatedName))
-            {
-                $updated = true;
-                $project->name = $request->get('name');
-            }
+        $updated = false;
+        $updatedName = $request->get('name');
+        $updatedStatus = $request->get('status');
 
-            if (isset($updatedStatus))
-            {
-                $updated = true;
-                $project->status = $request->get('status');
-            }
+        if (isset($updatedName))
+        {
+            $updated = true;
+            $project->name = $request->get('name');
+        }
 
-            if ($updated)
-            {
-                $project->save();
-            }
-            else
-            {
-                return new Response("", HTTP::NOT_MODIFIED);
-            }
+        if (isset($updatedStatus))
+        {
+            $updated = true;
+            $project->status = $request->get('status');
+        }
 
+        if ($updated)
+        {
+            $project->save();
             return [
                 $project->id => $project,
                 "updated" => true,
