@@ -44,6 +44,9 @@ class Handler extends ExceptionHandler
             return parent::render($request, $e);
         }
 
-        return response(\Twig::render("pages/error", ['code' => $e->getStatusCode()]), $e->getStatusCode());
+        return new Response($e->getStatusCode(), [
+            'error' => true,
+            'code' => $e->getStatusCode(),
+        ]);
     }
 }
