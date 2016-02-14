@@ -38,7 +38,7 @@ class TaskControllerTest extends TestCase
         $this->assertEquals(HTTP::NO_CONTENT, $response->status());
     }
 
-    public function testSuccessfullyAddNewTask()
+    public function testSucrcessfullyAddNewTask()
     {
         $task = [
             "name" => "Test Task",

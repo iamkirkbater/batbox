@@ -10,8 +10,8 @@
          stopOnFailure="false"
          syntaxCheck="false">
     <testsuites>
-        <testsuite name="Integration">
-            <directory>./tests/integration</directory>
+        <testsuite name="Acceptance">
+            <directory>./tests/acceptance</directory>
         </testsuite>
         <testsuite name="Unit">
             <directory>./tests/unit</directory>
