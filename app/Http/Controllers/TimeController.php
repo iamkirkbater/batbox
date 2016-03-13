@@ -7,7 +7,6 @@ use Batbox\Http\Requests;
 use Batbox\Models\Project;
 use Batbox\Models\Task;
 use Batbox\Models\Time;
-use Batbox\Validators\TimeValidator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Teapot\HttpResponse\Status\StatusCode as HTTP;
@@ -15,13 +14,6 @@ use \Input;
 
 class TimeController extends Controller
 {
-    protected $validator;
-
-    public function __construct(TimeValidator $validator)
-    {
-        $this->validator = $validator;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -38,25 +30,16 @@ class TimeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\StoreTimeRequest $request)
     {
-        try
-        {
-            $validate = $this->validator->validate(Input::all());
+        $time = new Time();
+        $time->start = Input::get('start');
+        $time->end = Input::get('end');
+        $time->project_id = Input::get('project_id');
+        $time->task_id = Input::get('task_id');
+        $time->save();
 
-            $time = new Time();
-            $time->start = Input::get('start');
-            $time->end = Input::get('end');
-            $time->project_id = Input::get('project_id');
-            $time->task_id = Input::get('task_id');
-            $time->save();
-
-            return new Response($time, HTTP::CREATED);
-        }
-        catch(ValidationException $e)
-        {
-            return new Response(['error' => true, 'messages' => $e->get_errors()], HTTP::BAD_REQUEST);
-        }
+        return new Response($time, HTTP::CREATED);
     }
 
     /**
