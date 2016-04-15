@@ -19,7 +19,14 @@ Route::get('/', function () {
 });
 
 
-Route::resource('projects', 'ProjectController');
-Route::resource('tasks', 'TaskController');
-Route::resource('users', 'UserController');
-Route::resource('time', 'TimeController');
+//Route::resource('projects', 'ProjectController');
+//Route::resource('tasks', 'TaskController');
+//Route::resource('users', 'UserController');
+//Route::resource('time', 'TimeController');
+
+Route::group(['prefix' => 'api/v1', 'middleware' => 'apiable'], function() {
+    Route::resource('projects', 'ProjectController');
+    Route::resource('tasks', 'TaskController');
+    Route::resource('users', 'UserController');
+    Route::resource('time', 'TimeController');
+});

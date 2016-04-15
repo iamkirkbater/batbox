@@ -19,14 +19,14 @@ class TaskControllerTest extends TestCase
     public function testForTaskPage()
     {
         $tasks = Task::all();
-        $this->visit("/tasks")
+        $this->visit("api/v1/tasks")
              ->seeJsonContains(['id'=>"1"]);
     }
 
     public function testForSingleTask()
     {
         $taskToTest = Task::find(1);
-        $this->visit("/tasks/1")
+        $this->visit("api/v1/tasks/1")
              ->seeJson([
                  'id' => "1",
              ]);
@@ -34,7 +34,7 @@ class TaskControllerTest extends TestCase
 
     public function testForNoTaskFound()
     {
-        $response = $this->call('get', '/tasks/-1');
+        $response = $this->call('get', 'api/v1/tasks/-1');
         $this->assertEquals(HTTP::NO_CONTENT, $response->status());
     }
 
@@ -45,7 +45,7 @@ class TaskControllerTest extends TestCase
             "billable" => true,
         ];
 
-        $response = $this->call('post', '/tasks', $task);
+        $response = $this->call('post', 'api/v1/tasks', $task);
         $this->assertEquals(HTTP::CREATED, $response->status());
         $this->seeJsonContains($task);
     }
@@ -54,30 +54,30 @@ class TaskControllerTest extends TestCase
     {
         $task = [];
 
-        $response = $this->call('post', '/tasks');
+        $response = $this->call('post', 'api/v1/tasks');
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
 
-        $response = $this->call('post', '/tasks', $task);
+        $response = $this->call('post', 'api/v1/tasks', $task);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->seeError();
         $this->see("Name");
         $this->see("Billable");
 
         $task["name"] = "Test Task";
-        $response = $this->call('post', '/tasks', $task);
+        $response = $this->call('post', 'api/v1/tasks', $task);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->seeError();
         $this->see("Billable");
 
         $task = ["billable" => true];
-        $response = $this->call('post', '/tasks', $task);
+        $response = $this->call('post', 'api/v1/tasks', $task);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->seeError();
         $this->see("Name");
 
         $task["billable"] = "string";
         $task["name"] = "Test Task";
-        $response = $this->call('post', '/tasks', $task);
+        $response = $this->call('post', 'api/v1/tasks', $task);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->seeError();
     }
@@ -92,7 +92,7 @@ class TaskControllerTest extends TestCase
         $task = [
             "name" => "Updated Task",
         ];
-        $response = $this->call('patch', '/tasks/'.$testTask->id, $task);
+        $response = $this->call('patch', 'api/v1/tasks/'.$testTask->id, $task);
         $this->assertEquals(HTTP::OK, $response->status());
         $this->seeJsonContains(array("name" => "Updated Task"));
 
@@ -101,24 +101,24 @@ class TaskControllerTest extends TestCase
         $task = [
             "billable" => false,
         ];
-        $response = $this->call('patch', '/tasks/' . $testTask->id, $task);
+        $response = $this->call('patch', 'api/v1/tasks/' . $testTask->id, $task);
         $this->assertEquals(HTTP::OK, $response->status());
         $this->seeJsonContains(["billable" => false]);
     }
 
     public function test_fail_patch_tasks()
     {
-        $response = $this->call('patch', '/tasks/-1', []);
+        $response = $this->call('patch', 'api/v1/tasks/-1', []);
         $this->assertEquals(HTTP::NOT_MODIFIED, $response->status());
 
         $testTask = $this->generateTestTask();
         $testTask->save();
         $this->seeInDatabase('tasks', ['name'=>$testTask->name]);
 
-        $response = $this->call('patch', '/tasks/'.$testTask->id, []);
+        $response = $this->call('patch', 'api/v1/tasks/'.$testTask->id, []);
         $this->assertEquals(HTTP::NOT_MODIFIED, $response->status());
 
-        $response = $this->call('patch', '/tasks/'.$testTask->id, [
+        $response = $this->call('patch', 'api/v1/tasks/'.$testTask->id, [
             "billable" => "asldkfj",
         ]);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
@@ -130,14 +130,14 @@ class TaskControllerTest extends TestCase
         $task->save();
         $this->seeInDatabase("tasks", ["name"=>$task->name]);
 
-        $response = $this->call('delete', '/tasks/'.$task->id, []);
+        $response = $this->call('delete', 'api/v1/tasks/'.$task->id, []);
         $this->assertEquals(HTTP::OK, $response->status());
         $this->notSeeInDatabase("tasks", ["name"=>$task->name]);
     }
 
     public function test_fail_to_delete_a_task()
     {
-        $response = $this->call('delete', '/tasks/-1', []);
+        $response = $this->call('delete', 'api/v1/tasks/-1', []);
         $this->assertEquals(HTTP::NOT_MODIFIED, $response->status());
     }
 

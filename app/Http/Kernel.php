@@ -29,5 +29,6 @@ class Kernel extends HttpKernel
         'auth' => \Batbox\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \Batbox\Http\Middleware\RedirectIfAuthenticated::class,
+        'apiable' => \Batbox\Http\Middleware\APIable::class,
     ];
 }

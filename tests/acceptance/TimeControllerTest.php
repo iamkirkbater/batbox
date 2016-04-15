@@ -19,46 +19,46 @@ class TimeControllerTest extends TestCase
 
     public function testCantAccessIndex()
     {
-        $request = $this->call('get', '/time');
+        $request = $this->call('get', 'api/v1/time');
         $this->assertEquals(HTTP::NOT_FOUND, $request->getStatusCode());
     }
 
     public function test_log_time_route_exists()
     {
-        $request = $this->call('post', '/time');
+        $request = $this->call('post', 'api/v1/time');
         $this->assertNotEquals(HTTP::NOT_FOUND, $request->getStatusCode());
     }
 
     public function test_log_time_fails_on_invalid_date()
     {
         $data = [];
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('Start time is not valid.');
 
         $data['start'] = 'a';
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('Start time is not valid.');
 
         $data['start'] = 1.1;
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('Start time is not valid.');
 
         $data['start'] = strtotime('2016-02-01 13:10');
         $data['end'] = 'a';
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('End time is not valid.');
 
         $data['end'] = 21.12;
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('End time is not valid.');
 
         $data['end'] = strtotime('2016-01-31 14:00');
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('End time is before start time.');
     }
@@ -69,22 +69,22 @@ class TimeControllerTest extends TestCase
             'start' => strtotime('2016-02-02 09:00'),
             'end' => strtotime('2016-02-02 10:30'),
         ];
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('Project not specified.');
 
         $data['project_id'] = null;
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('Project not specified.');
 
         $data['project_id'] = -1;
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('Invalid project id specified.');
 
         $data['project_id'] = 'a';
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('Invalid project id specified.');
     }
@@ -99,7 +99,7 @@ class TimeControllerTest extends TestCase
             'project_id' => $project->id,
         ];
 
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('Project is not active.');
     }
@@ -114,12 +114,12 @@ class TimeControllerTest extends TestCase
             'project_id' => $project->id,
         ];
 
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see('Task not provided.');
 
         $data['task_id'] = -1;
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::BAD_REQUEST, $request->getStatusCode());
         $this->see("Task not provided.");
 
@@ -136,7 +136,7 @@ class TimeControllerTest extends TestCase
             'task_id' => $task->id,
         ];
 
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::CREATED, $request->getStatusCode());
         $this->see($data['start']);
         $this->see($data['end']);
@@ -157,7 +157,7 @@ class TimeControllerTest extends TestCase
             'notes' => 'This is my note.  IT describes what I did.'
         ];
 
-        $request = $this->call('post', '/time', $data);
+        $request = $this->call('post', 'api/v1/time', $data);
         $this->assertEquals(HTTP::CREATED, $request->getStatusCode());
         $this->see('"notes":"'.$data['notes'].'"');
         $this->seeInDatabase('times', $data);

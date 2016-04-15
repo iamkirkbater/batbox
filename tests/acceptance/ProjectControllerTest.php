@@ -20,14 +20,14 @@ class ProjectControllerTest extends TestCase
 
     public function testForProjectsPage()
     {
-        $this->visit('/projects')
+        $this->visit('api/v1/projects')
             ->see('Projects');
     }
 
     public function testForSingleID()
     {
         $testProject = Project::find(1);
-        $this->visit('/projects/1')
+        $this->visit('api/v1/projects/1')
              ->seeJson(["name" => $testProject->name]);
     }
 
@@ -35,20 +35,20 @@ class ProjectControllerTest extends TestCase
     {
         $projectName = 'Test Project';
 
-        $response = $this->call('POST', '/projects', []);
+        $response = $this->call('POST', 'api/v1/projects', []);
 
         $this->seeJsonContains(["error" => true]);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->assertNotEquals(HTTP::CREATED, $response->status());
         $this->notSeeInDatabase('projects', ['name' => "Test Project"]);
 
-        $response = $this->call('POST', '/projects', ["name" => $projectName]);
+        $response = $this->call('POST', 'api/v1/projects', ["name" => $projectName]);
         $this->seeJsonContains(["error" => true]);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->assertNotEquals(HTTP::CREATED, $response->status());
         $this->notSeeInDatabase('projects', ['name' => $projectName]);
 
-        $response = $this->call('POST', '/projects', ["status" => true]);
+        $response = $this->call('POST', 'api/v1/projects', ["status" => true]);
         $this->seeJsonContains(["error" => true]);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->assertNotEquals(HTTP::CREATED, $response->status());
@@ -59,7 +59,7 @@ class ProjectControllerTest extends TestCase
     {
         $projectName = 'Test Project';
 
-        $response = $this->call('POST', '/projects', [
+        $response = $this->call('POST', 'api/v1/projects', [
             'name'=> $projectName,
             'status' => 1,
         ]);
@@ -80,11 +80,11 @@ class ProjectControllerTest extends TestCase
         $to_patch = ['name' => $updated_project_name];
 
         // Call without an ID
-        $response = $this->call('patch', '/projects', $to_patch);
+        $response = $this->call('patch', 'api/v1/projects', $to_patch);
         $this->assertEquals(HTTP::METHOD_NOT_ALLOWED, $response->status());
 
         // call with invalid id
-        $response = $this->call('patch', '/projects/-1', $to_patch);
+        $response = $this->call('patch', 'api/v1/projects/-1', $to_patch);
         $this->assertEquals(HTTP::NOT_MODIFIED, $response->status());
     }
 
@@ -98,7 +98,7 @@ class ProjectControllerTest extends TestCase
         $this->seeInDatabase('projects', ['name'=>$project->name]);
 
         // change the project's name, and verify that it's updated
-        $response = $this->call('patch', '/projects/'.$project->id, [
+        $response = $this->call('patch', 'api/v1/projects/'.$project->id, [
             'name' => $updated_project_name,
             ]);
 
@@ -110,7 +110,7 @@ class ProjectControllerTest extends TestCase
         $this->seeInDatabase('projects', ['name'=>$updated_project_name, 'status'=>1]);
 
         // Change the project's status, and verify that it's updated
-        $response = $this->call('patch', '/projects/'.$project->id, [
+        $response = $this->call('patch', 'api/v1/projects/'.$project->id, [
             'status' => 0,
             ]);
         $this->seeJsonContains([
@@ -121,7 +121,7 @@ class ProjectControllerTest extends TestCase
         $this->seeInDatabase('projects', ['name'=>$updated_project_name, 'status'=>0]);
 
         // Now change both the status AND the name, and verify that they've been updated
-        $response = $this->call('patch', '/projects/'.$project->id, [
+        $response = $this->call('patch', 'api/v1/projects/'.$project->id, [
                 'status' => $project->status,
                 'name' => $project->name,
             ]);
@@ -141,7 +141,7 @@ class ProjectControllerTest extends TestCase
 
         $this->seeInDatabase('projects', ['name' => $project->name]);
 
-        $response = $this->call('delete', '/projects/'.$project->id);
+        $response = $this->call('delete', 'api/v1/projects/'.$project->id);
 
         $this->seeJsonContains([
                  'deleted' => true,
@@ -159,13 +159,13 @@ class ProjectControllerTest extends TestCase
         $this->seeInDatabase('projects', ['name' => $project->name]);
 
         // Call without id
-        $response = $this->call('delete', '/projects');
+        $response = $this->call('delete', 'api/v1/projects');
         $this->assertEquals(HTTP::METHOD_NOT_ALLOWED, $response->status());
         $this->seeInDatabase('projects', ["name" => $project->name]);
 
 
         // Call with Invalid ID
-        $response = $this->call('delete', '/projects/-1');
+        $response = $this->call('delete', 'api/v1/projects/-1');
         $this->assertEquals(HTTP::NOT_MODIFIED, $response->status());
 
     }

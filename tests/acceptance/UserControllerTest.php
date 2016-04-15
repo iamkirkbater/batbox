@@ -21,7 +21,7 @@ class UserControllerTest extends TestCase
     public function test_users_page_exists()
     {
         $users = User::all();
-        $this->visit("/users")
+        $this->visit("api/v1/users")
             ->see('users');
     }
 
@@ -34,7 +34,7 @@ class UserControllerTest extends TestCase
         unset($user);
 
         $user = User::find($id);
-        $this->visit("/users/".$id)
+        $this->visit("api/v1/users/".$id)
             ->seeJsonContains(["first" => $user->first])
             ->seeJsonContains(["last" => $user->last])
             ->seeJsonContains(["username" => $user->username])
@@ -43,7 +43,7 @@ class UserControllerTest extends TestCase
 
     public function test_user_not_found()
     {
-        $response = $this->call('get', '/users/-1');
+        $response = $this->call('get', 'api/v1/users/-1');
         $this->assertEquals(HTTP::NO_CONTENT, $response->status());
     }
 
@@ -51,7 +51,7 @@ class UserControllerTest extends TestCase
     {
         $user = $this->getTestUserData();
 
-        $response = $this->call('post', '/users', $user);
+        $response = $this->call('post', 'api/v1/users', $user);
         $this->assertEquals(HTTP::CREATED, $response->status());
         $this->seeJsonContains($user);
     }
@@ -60,10 +60,10 @@ class UserControllerTest extends TestCase
     {
         $user = [];
 
-        $response = $this->call('post', '/users');
+        $response = $this->call('post', 'api/v1/users');
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
 
-        $response = $this->call('post', '/users', $user);
+        $response = $this->call('post', 'api/v1/users', $user);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->seeError();
         $this->see("First Name");
@@ -71,7 +71,7 @@ class UserControllerTest extends TestCase
         $this->see("Username");
 
         $user["first"] = "Test";
-        $response = $this->call('post', '/users', $user);
+        $response = $this->call('post', 'api/v1/users', $user);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->seeError();
         $this->see("Last Name");
@@ -79,7 +79,7 @@ class UserControllerTest extends TestCase
 
         $user = [];
         $user["last"] = "Last";
-        $response = $this->call('post', '/users', $user);
+        $response = $this->call('post', 'api/v1/users', $user);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->seeError();
         $this->see("First Name");
@@ -87,7 +87,7 @@ class UserControllerTest extends TestCase
 
         $user = [];
         $user["username"] = "txltwc";
-        $response = $this->call('post', '/users', $user);
+        $response = $this->call('post', 'api/v1/users', $user);
         $this->assertEquals(HTTP::BAD_REQUEST, $response->status());
         $this->seeError();
         $this->see("First Name");
@@ -104,7 +104,7 @@ class UserControllerTest extends TestCase
         $user = [
             "first" => "Updated",
         ];
-        $response = $this->call('patch', '/users/'.$testUser->id, $user);
+        $response = $this->call('patch', 'api/v1/users/'.$testUser->id, $user);
         $this->assertEquals(HTTP::OK, $response->status());
         $this->seeJsonContains(["first" => "Updated"]);
 
@@ -113,7 +113,7 @@ class UserControllerTest extends TestCase
         $user = [
             "last" => "Updated",
         ];
-        $response = $this->call('patch', '/users/' . $testUser->id, $user);
+        $response = $this->call('patch', 'api/v1/users/' . $testUser->id, $user);
         $this->assertEquals(HTTP::OK, $response->status());
         $this->seeJsonContains(["last" => "Updated"]);
 
@@ -122,21 +122,21 @@ class UserControllerTest extends TestCase
         $user = [
             "username" => "updted",
         ];
-        $response = $this->call('patch', '/users/' . $testUser->id, $user);
+        $response = $this->call('patch', 'api/v1/users/' . $testUser->id, $user);
         $this->assertEquals(HTTP::OK, $response->status());
         $this->seeJsonContains(["username" => "updted"]);
     }
 
     public function test_fail_patch_users()
     {
-        $response = $this->call('patch', '/users/-1', []);
+        $response = $this->call('patch', 'api/v1/users/-1', []);
         $this->assertEquals(HTTP::NOT_MODIFIED, $response->status());
 
         $testUser = $this->generateTestUser();
         $testUser->save();
         $this->seeInDatabase('users', $this->getTestUserData());
 
-        $response = $this->call('patch', '/users/'.$testUser->id, []);
+        $response = $this->call('patch', 'api/v1/users/'.$testUser->id, []);
         $this->assertEquals(HTTP::NOT_MODIFIED, $response->status());
     }
 
@@ -146,7 +146,7 @@ class UserControllerTest extends TestCase
         $user->save();
         $this->seeInDatabase("users", $this->getTestUserData());
 
-        $response = $this->call('delete', '/users/'.$user->id, []);
+        $response = $this->call('delete', 'api/v1/users/'.$user->id, []);
         $this->assertEquals(HTTP::OK, $response->status());
         $this->seeInDatabase("users", $this->getTestUserData());
         $this->seeIsSoftDeletedInDatabase("users", $this->getTestUserData());
@@ -154,7 +154,7 @@ class UserControllerTest extends TestCase
 
     public function test_fail_to_delete_a_user()
     {
-        $response = $this->call('delete', '/users/-1', []);
+        $response = $this->call('delete', 'api/v1/users/-1', []);
         $this->assertEquals(HTTP::NOT_MODIFIED, $response->status());
     }
 
