@@ -35,6 +35,10 @@ class TaskSeeder extends Seeder
             'name' => 'Time Not Billable',
             'billable' => true,
         ]);
+        Task::create([
+            'name' => 'Support',
+            'billable' => true,
+        ]);
 
         $this->command->info('Initial Tasks have been seeded.');
     }
