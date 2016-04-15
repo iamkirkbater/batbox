@@ -145,6 +145,24 @@ class TimeControllerTest extends TestCase
         $this->seeInDatabase('times', $data);
     }
 
+    public function test_time_log_with_notes()
+    {
+        $project = Project::where('status', 1)->first();
+        $task = Task::all()->first();
+        $data = [
+            'start' => strtotime('2016-02-02 09:00'),
+            'end' => strtotime('2016-02-02 10:30'),
+            'project_id' => $project->id,
+            'task_id' => $task->id,
+            'notes' => 'This is my note.  IT describes what I did.'
+        ];
+
+        $request = $this->call('post', '/time', $data);
+        $this->assertEquals(HTTP::CREATED, $request->getStatusCode());
+        $this->see('"notes":"'.$data['notes'].'"');
+        $this->seeInDatabase('times', $data);
+    }
+
     private function seedTestDB() {
         \Artisan::call('db:seed');
     }

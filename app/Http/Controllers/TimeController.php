@@ -37,6 +37,7 @@ class TimeController extends Controller
         $time->end = Input::get('end');
         $time->project_id = Input::get('project_id');
         $time->task_id = Input::get('task_id');
+        $time->notes = Input::get('notes');
         $time->save();
 
         return new Response($time, HTTP::CREATED);

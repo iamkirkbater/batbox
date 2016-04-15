@@ -25,27 +25,6 @@ class StoreTimeRequest extends Request
         $factory->extend('project_is_active', $validate_active_project);
     }
 
-    /**
-     * Overrides parent function to append custom validation.
-     *
-     * @return Validator
-//     */
-//    public function getValidatorInstance()
-//    {
-//        $validator = parent::getValidatorInstance();
-//
-//
-//
-//        return $validator;
-//    }
-
-//    public function validator(Factory $factory)
-//    {
-//
-//
-//        return $this;
-//    }
-
 
     /**
      * Determine if the user is authorized to make this request.

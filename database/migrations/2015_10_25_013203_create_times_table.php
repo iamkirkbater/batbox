@@ -16,6 +16,7 @@ class CreateTimesTable extends Migration
             $table->increments('id');
             $table->integer('start');
             $table->integer('end');
+            $table->text('notes')->nullable();
             $table->integer('project_id')->unsigned();
             $table->integer('task_id')->unsigned();
             $table->foreign('project_id')->references('id')->on('projects');
