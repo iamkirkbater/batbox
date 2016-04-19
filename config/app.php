@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'url' => 'http://localhost',
+    'url' => 'http://dev.batbox.rit.edu',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY', 'SomeRandomString'),
+    'key' => env('APP_KEY', 'a05BriUZnA6^&xzTfJYwVyDk00n6HU0%'),
 
     'cipher' => 'AES-256-CBC',
 

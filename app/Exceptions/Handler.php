@@ -5,6 +5,7 @@ namespace Batbox\Exceptions;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Response;
 
 class Handler extends ExceptionHandler
 {
@@ -44,9 +45,14 @@ class Handler extends ExceptionHandler
             return parent::render($request, $e);
         }
 
-        return new Response($e->getStatusCode(), [
-            'error' => true,
-            'code' => $e->getStatusCode(),
-        ]);
+        if ($request->wantsJson())
+        {
+            return new Response($e->getStatusCode(), [
+                'error' => true,
+                'code' => $e->getStatusCode(),
+            ]);
+        }
+
+        return parent::render($request, $e);
     }
 }
