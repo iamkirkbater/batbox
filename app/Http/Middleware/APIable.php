@@ -4,6 +4,7 @@ namespace Batbox\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Response;
+use Teapot\HttpResponse\Status\StatusCode as HTTP;
 
 class APIable
 {
@@ -18,16 +19,34 @@ class APIable
     public function handle($request, Closure $next)
     {
         $data = $next($request)->getOriginalContent();
+        $responseCode = $this->getResponseCodeFromData($data);
+        $view = $this->getViewDisplayFromData($data);
 
-        if ($request->wantsJson())
+        if ($request->wantsJson() || $view == 'json')
         {
-            if ( ! isset($data['responseCode']))
-            {
-                $data['responseCode'] = 200;
-            }
             return new Response($data['data'], $data['responseCode']);
         }
 
         return view($data['view'], $data['data']);
+    }
+
+    public function getResponseCodeFromData($data)
+    {
+        if ( ! isset($data['responseCode']))
+        {
+            return HTTP::OK;
+        }
+
+        return $data['responseCode'];
+    }
+
+    public function getViewDisplayFromData($data)
+    {
+        if ( ! isset($data['view']))
+        {
+            return 'json';
+        }
+
+        return $data['view'];
     }
 }

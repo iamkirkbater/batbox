@@ -20,7 +20,7 @@ class ProjectController extends Controller
     public function index()
     {
         $arr = [ "projects" => Project::all() ];
-        return new Response($arr, HTTP::OK);
+        return ['data' => $arr, 'responseCode' => HTTP::OK];
     }
 
     /**
@@ -39,7 +39,7 @@ class ProjectController extends Controller
             $param .= ($nameNotProvided) ? "Name" : "";
             $param .= ($nameNotProvided && $statusNotProvided) ? ", " : "";
             $param .= ($statusNotProvided) ? "Status" : "";
-            return new Response(["error" => true, "message" => "$param parameter(s) not provided."], HTTP::BAD_REQUEST);
+            return ['data' => ["error" => true, "message" => "$param parameter(s) not provided."], 'responseCode' => HTTP::BAD_REQUEST];
         }
 
         $project = new Project();
